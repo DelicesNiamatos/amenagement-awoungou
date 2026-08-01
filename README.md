@@ -8,6 +8,7 @@ Modèle 3D interactif du terrain aménagé du projet **Ferme Niamatos Gabon — 
 - **Projet** : Délices Niamatos / Ferme Niamatos Gabon SARL
 - **Données source** : Plan de culture et d'aménagement phasé du pilote Awoungou (Notion — DN OS)
 - **Modèle original** : Conçu dans Claude Design (Claude IA)
+- **Déploiement** : GitHub Pages via GitHub Actions
 
 ## Fonctionnalités
 
@@ -36,7 +37,7 @@ Modèle 3D interactif du terrain aménagé du projet **Ferme Niamatos Gabon — 
 
 ## Hébergement GitHub Pages
 
-Ce dépôt est publié avec **GitHub Pages** : le site est accessible à l'URL affichée dans la section Environments du dépôt.
+Ce dépôt est publié avec **GitHub Pages** : le site sera accessible à `https://delicesniamatos.github.io/amenagement-awoungou/` une fois le workflow terminé.
 
 ## Développement local
 
