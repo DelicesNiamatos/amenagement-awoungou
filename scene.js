@@ -1,12 +1,12 @@
-import * as T from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import * as T from 'https://esm.sh/three@0.160.0';
+import { OrbitControls } from 'https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
 const DATA = window.D;
 const err = (msg) => {
   const e = document.getElementById('error');
   const l = document.getElementById('loading');
   const u = document.getElementById('ui');
-  if (e) { e.style.display = 'block'; e.innerHTML = `<strong>Erreur 3D</strong><br>${msg}`; }
+  if (e) { e.style.display = 'block'; e.innerHTML = '<strong>Erreur 3D</strong><br>' + msg; }
   if (l) l.style.display = 'none';
   if (u) u.style.display = 'none';
   console.error(msg);
@@ -20,9 +20,21 @@ const ok = () => {
 
 try {
   if (!DATA) throw new Error('data.js non chargé : window.D est indéfini.');
+  if (typeof T === 'undefined' || !T.Scene) throw new Error('Three.js non chargé depuis le CDN.');
+  if (typeof OrbitControls === 'undefined') throw new Error('OrbitControls non chargé depuis le CDN.');
 
   const canvas = document.getElementById('c');
   if (!canvas) throw new Error('Canvas #c introuvable.');
+
+  let renderer;
+  try {
+    renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  } catch (glErr) {
+    throw new Error('WebGL non disponible sur ce navigateur : ' + glErr.message);
+  }
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
 
   const scene = new T.Scene();
   scene.background = new T.Color(0xe8e6e1);
@@ -30,12 +42,6 @@ try {
 
   const camera = new T.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 100);
   camera.position.set(18, 14, 18);
-
-  const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: false });
-  if (!renderer) throw new Error('WebGL non disponible sur ce navigateur.');
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -127,12 +133,12 @@ try {
     const hits = ray.intersectObjects(zones.map(z => z.box));
     if (hits.length) {
       const z = DATA[hits[0].object.userData.id];
-      let html = `<h3 style="color:${z.c}">● Zone ${hits[0].object.userData.id} — ${z.n}</h3>`;
-      html += `<p><b>Surface:</b> ${z.s} | <b>Phase:</b> ${z.p}</p>`;
-      html += `<p><b>Items:</b> ${z.i}</p>`;
-      html += `<p><b>Budget:</b> ${z.b}</p>`;
-      html += `<p><b>Clés:</b> ${z.k}</p>`;
-      html += `<p><b>Points à vérifier:</b></p><ul>${z.w.split(',').map(x => `<li>${x.trim()}</li>`).join('')}</ul>`;
+      let html = '<h3 style="color:' + z.c + '">● Zone ' + hits[0].object.userData.id + ' — ' + z.n + '</h3>';
+      html += '<p><b>Surface:</b> ' + z.s + ' | <b>Phase:</b> ' + z.p + '</p>';
+      html += '<p><b>Items:</b> ' + z.i + '</p>';
+      html += '<p><b>Budget:</b> ' + z.b + '</p>';
+      html += '<p><b>Clés:</b> ' + z.k + '</p>';
+      html += '<p><b>Points à vérifier:</b></p><ul>' + z.w.split(',').map(x => '<li>' + x.trim() + '</li>').join('') + '</ul>';
       document.getElementById('ib').innerHTML = html;
       document.getElementById('info').classList.add('on');
     }
