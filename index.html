@@ -3,7 +3,7 @@
 <script src="data.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
-<body><canvas id="c"></canvas><div id="ui">
+<body><canvas id="c"></canvas><div id="loading">Chargement du modèle 3D…</div><div id="error" style="display:none"></div><div id="ui" style="display:none">
 <header class="p"><div><h1>🌾 Ferme Niamatos Gabon — Pilote Awoungou</h1><p>Modèle 3D interactif • 1 500 m² • Owendo • Plan phasé</p></div><div><span class="c">🖱️ pivoter</span><span class="c">📜 zoomer</span><span class="c">👆 fiche</span></div></header>
 <div class="p" id="side"><h2 style="margin:0 0 8px;font-size:13px">Phases</h2><div id="ph"><button data-p="0" class="on">0 Diagnostic</button><button data-p="1">1 Pépinière</button><button data-p="2">2 Bananes/Manioc</button><button data-p="3">3 Papayers/Maraîchage</button><button data-p="4">4 Habitat</button></div>
 <h2 style="margin:10px 0 6px;font-size:13px">Zones</h2>
@@ -17,5 +17,5 @@
 <div class="p" id="info"><button class="x" onclick="hide()">×</button><div id="ib"></div></div>
 <div id="ctrl"><button onclick="rv()">Vue d'ensemble</button><button onclick="tv()">Vue de dessus</button></div>
 </div>
-<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module" src="scene.js"></script></body></html>
