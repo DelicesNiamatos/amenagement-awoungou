@@ -1,26 +1,156 @@
-import*as T from'three';import{OrbitControls}from'three/addons/controls/OrbitControls.js';
-const DATA=window.D;
-if(!DATA){console.error('data.js non chargé');document.body.innerHTML='<div style="padding:20px;font-family:sans-serif;color:red"><h3>Erreur de chargement</h3><p>Les données des zones (data.js) n\'ont pas été chargées. Rechargez la page.</p></div>';throw new Error('data.js manquant');}
-const s=new T.Scene();s.background=new T.Color(0xe8e6e1);s.fog=new T.Fog(0xe8e6e1,15,60);
-const c=new T.PerspectiveCamera(45,innerWidth/innerHeight,.1,100);c.position.set(18,14,18);
-const r=new T.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});r.setSize(innerWidth,innerHeight);r.shadowMap.enabled=true;
-const o=new OrbitControls(c,r.domElement);o.enableDamping=true;o.dampingFactor=.05;o.maxPolarAngle=Math.PI/2.2;o.minDistance=5;o.maxDistance=40;o.target.set(0,0,0);
-const u=new T.DirectionalLight(0xffffff,1.2);u.position.set(10,20,8);u.castShadow=true;s.add(u);s.add(new T.AmbientLight(0xffffff,.5));
-const g=new T.Mesh(new T.PlaneGeometry(30,30),new T.MeshStandardMaterial({color:0xd6d2c8,roughness:.9}));g.rotation.x=-Math.PI/2;g.receiveShadow=true;s.add(g);
-const h=new T.GridHelper(30,30,0x999999,0xbbbbbb);h.position.y=.01;s.add(h);
-const Z=[];let P=0;
-function add(id,x,z,W,depth,H){const d=DATA[id];const G=new T.Group();G.position.set(x,H/2,z);const B=new T.Mesh(new T.BoxGeometry(W,H,depth),new T.MeshStandardMaterial({color:d.c,transparent:true,opacity:.85,roughness:.7}));B.castShadow=true;B.receiveShadow=true;B.userData={id};G.add(B);Z.push({G,id,B,H});const e=new T.EdgesGeometry(new T.BoxGeometry(W,H,depth));G.add(new T.LineSegments(e,new T.LineBasicMaterial({color:0x333333})));s.add(G);}
-add('A',-6,3,4,5,.2);add('B',3,2,8,6,.2);add('C',-5,-5,6,6,.2);add('D',4,-5,7,6,.2);add('E',0,8,6,4,.2);
-const Tm={};const cone=new T.ConeGeometry(.25,1,6);const box=new T.BoxGeometry(.4,.4,.4);
-function pl(id,n,ht,geom){const a=[];for(let i=0;i<n;i++){const m=new T.Mesh(geom,new T.MeshStandardMaterial({color:0x228b22}));m.castShadow=true;const z=Z.find(zz=>zz.id===id);m.position.set(z.G.position.x+(Math.random()-.5)*z.B.geometry.parameters.width*.8,ht/2+z.H/2,z.G.position.z+(Math.random()-.5)*z.B.geometry.parameters.depth*.8);m.scale.set(.6,.6,.6);m.visible=false;s.add(m);a.push(m);}Tm[id]=a;}
-pl('A',12,.5,cone);pl('B',18,1.2,cone);pl('C',10,.8,cone);pl('D',14,1,cone);pl('E',1,1.5,box);
-function sp(p){P=p;document.querySelectorAll('#ph button').forEach(b=>b.classList.toggle('on',+b.dataset.p===p));Object.keys(Tm).forEach(k=>Tm[k].forEach(m=>m.visible=p>=DATA[k].p));}
-sp(0);
-const ray=new T.Raycaster(),m=new T.Vector2();
-window.addEventListener('pointerdown',e=>{if(e.target.closest('button')||e.target.closest('.p'))return;m.x=(e.clientX/innerWidth)*2-1;m.y=-(e.clientY/innerHeight)*2+1;ray.setFromCamera(m,c);const h=ray.intersectObjects(Z.map(z=>z.B));if(h.length){const z=DATA[h[0].object.userData.id];let t=`<h3 style="color:${z.c}">● Zone ${h[0].object.userData.id} — ${z.n}</h3>`;t+=`<p><b>Surface:</b> ${z.s} | <b>Phase:</b> ${z.p}</p>`;t+=`<p><b>Items:</b> ${z.i}</p>`;t+=`<p><b>Budget:</b> ${z.b}</p>`;t+=`<p><b>Clés:</b> ${z.k}</p>`;t+=`<p><b>Points à vérifier:</b></p><ul>${z.w.split(',').map(x=>`<li>${x.trim()}</li>`).join('')}</ul>`;document.getElementById('ib').innerHTML=t;document.getElementById('info').classList.add('on');}});
-window.hide=function(){document.getElementById('info').classList.remove('on');};
-window.rv=function(){c.position.set(18,14,18);o.target.set(0,0,0);o.update();};
-window.tv=function(){c.position.set(0,25,0);o.target.set(0,0,0);o.update();};
-document.querySelectorAll('#ph button').forEach(b=>b.onclick=()=>sp(+b.dataset.p));
-window.addEventListener('resize',()=>{c.aspect=innerWidth/innerHeight;c.updateProjectionMatrix();r.setSize(innerWidth,innerHeight);});
-function a(){requestAnimationFrame(a);o.update();r.render(s,c);}a();
+import * as T from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const DATA = window.D;
+const err = (msg) => {
+  const e = document.getElementById('error');
+  const l = document.getElementById('loading');
+  const u = document.getElementById('ui');
+  if (e) { e.style.display = 'block'; e.innerHTML = `<strong>Erreur 3D</strong><br>${msg}`; }
+  if (l) l.style.display = 'none';
+  if (u) u.style.display = 'none';
+  console.error(msg);
+};
+const ok = () => {
+  const l = document.getElementById('loading');
+  const u = document.getElementById('ui');
+  if (l) l.style.display = 'none';
+  if (u) u.style.display = 'block';
+};
+
+try {
+  if (!DATA) throw new Error('data.js non chargé : window.D est indéfini.');
+
+  const canvas = document.getElementById('c');
+  if (!canvas) throw new Error('Canvas #c introuvable.');
+
+  const scene = new T.Scene();
+  scene.background = new T.Color(0xe8e6e1);
+  scene.fog = new T.Fog(0xe8e6e1, 15, 60);
+
+  const camera = new T.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 100);
+  camera.position.set(18, 14, 18);
+
+  const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  if (!renderer) throw new Error('WebGL non disponible sur ce navigateur.');
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.maxPolarAngle = Math.PI / 2.2;
+  controls.minDistance = 5;
+  controls.maxDistance = 40;
+  controls.target.set(0, 0, 0);
+
+  const light = new T.DirectionalLight(0xffffff, 1.2);
+  light.position.set(10, 20, 8);
+  light.castShadow = true;
+  scene.add(light);
+  scene.add(new T.AmbientLight(0xffffff, 0.5));
+
+  const ground = new T.Mesh(new T.PlaneGeometry(30, 30), new T.MeshStandardMaterial({ color: 0xd6d2c8, roughness: 0.9 }));
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  const grid = new T.GridHelper(30, 30, 0x999999, 0xbbbbbb);
+  grid.position.y = 0.01;
+  scene.add(grid);
+
+  const zones = [];
+  function addZone(id, x, z, W, depth, H) {
+    const d = DATA[id];
+    const group = new T.Group();
+    group.position.set(x, H / 2, z);
+    const box = new T.Mesh(
+      new T.BoxGeometry(W, H, depth),
+      new T.MeshStandardMaterial({ color: d.c, transparent: true, opacity: 0.85, roughness: 0.7 })
+    );
+    box.castShadow = true;
+    box.receiveShadow = true;
+    box.userData = { id };
+    group.add(box);
+    zones.push({ group, id, box, H });
+    const edges = new T.EdgesGeometry(new T.BoxGeometry(W, H, depth));
+    group.add(new T.LineSegments(edges, new T.LineBasicMaterial({ color: 0x333333 })));
+    scene.add(group);
+  }
+  addZone('A', -6, 3, 4, 5, 0.2);
+  addZone('B', 3, 2, 8, 6, 0.2);
+  addZone('C', -5, -5, 6, 6, 0.2);
+  addZone('D', 4, -5, 7, 6, 0.2);
+  addZone('E', 0, 8, 6, 4, 0.2);
+
+  const items = {};
+  const cone = new T.ConeGeometry(0.25, 1, 6);
+  const box = new T.BoxGeometry(0.4, 0.4, 0.4);
+  function placeItems(id, n, ht, geom) {
+    const a = [];
+    const zone = zones.find(z => z.id === id);
+    for (let i = 0; i < n; i++) {
+      const m = new T.Mesh(geom, new T.MeshStandardMaterial({ color: 0x228b22 }));
+      m.castShadow = true;
+      m.position.set(
+        zone.group.position.x + (Math.random() - 0.5) * zone.box.geometry.parameters.width * 0.8,
+        ht / 2 + zone.H / 2,
+        zone.group.position.z + (Math.random() - 0.5) * zone.box.geometry.parameters.depth * 0.8
+      );
+      m.scale.set(0.6, 0.6, 0.6);
+      m.visible = false;
+      scene.add(m);
+      a.push(m);
+    }
+    items[id] = a;
+  }
+  placeItems('A', 12, 0.5, cone);
+  placeItems('B', 18, 1.2, cone);
+  placeItems('C', 10, 0.8, cone);
+  placeItems('D', 14, 1, cone);
+  placeItems('E', 1, 1.5, box);
+
+  function setPhase(p) {
+    document.querySelectorAll('#ph button').forEach(b => b.classList.toggle('on', +b.dataset.p === p));
+    Object.keys(items).forEach(k => items[k].forEach(m => m.visible = p >= DATA[k].p));
+  }
+  setPhase(0);
+
+  const ray = new T.Raycaster();
+  const mouse = new T.Vector2();
+  window.addEventListener('pointerdown', e => {
+    if (e.target.closest('button') || e.target.closest('.p')) return;
+    mouse.x = (e.clientX / innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / innerHeight) * 2 + 1;
+    ray.setFromCamera(mouse, camera);
+    const hits = ray.intersectObjects(zones.map(z => z.box));
+    if (hits.length) {
+      const z = DATA[hits[0].object.userData.id];
+      let html = `<h3 style="color:${z.c}">● Zone ${hits[0].object.userData.id} — ${z.n}</h3>`;
+      html += `<p><b>Surface:</b> ${z.s} | <b>Phase:</b> ${z.p}</p>`;
+      html += `<p><b>Items:</b> ${z.i}</p>`;
+      html += `<p><b>Budget:</b> ${z.b}</p>`;
+      html += `<p><b>Clés:</b> ${z.k}</p>`;
+      html += `<p><b>Points à vérifier:</b></p><ul>${z.w.split(',').map(x => `<li>${x.trim()}</li>`).join('')}</ul>`;
+      document.getElementById('ib').innerHTML = html;
+      document.getElementById('info').classList.add('on');
+    }
+  });
+
+  window.hide = function () { document.getElementById('info').classList.remove('on'); };
+  window.rv = function () { camera.position.set(18, 14, 18); controls.target.set(0, 0, 0); controls.update(); };
+  window.tv = function () { camera.position.set(0, 25, 0); controls.target.set(0, 0, 0); controls.update(); };
+  document.querySelectorAll('#ph button').forEach(b => b.onclick = () => setPhase(+b.dataset.p));
+  window.addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+
+  function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
+  animate();
+  ok();
+} catch (e) {
+  err(e.message);
+}
