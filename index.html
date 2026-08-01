@@ -1,1 +1,21 @@
-test
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aménagement Awoungou — Pilote</title>
+<script src="data.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body><canvas id="c"></canvas><div id="ui">
+<header class="p"><div><h1>🌾 Ferme Niamatos Gabon — Pilote Awoungou</h1><p>Modèle 3D interactif • 1 500 m² • Owendo • Plan phasé</p></div><div><span class="c">🖱️ pivoter</span><span class="c">📜 zoomer</span><span class="c">👆 fiche</span></div></header>
+<div class="p" id="side"><h2 style="margin:0 0 8px;font-size:13px">Phases</h2><div id="ph"><button data-p="0" class="on">0 Diagnostic</button><button data-p="1">1 Pépinière</button><button data-p="2">2 Bananes/Manioc</button><button data-p="3">3 Papayers/Maraîchage</button><button data-p="4">4 Habitat</button></div>
+<h2 style="margin:10px 0 6px;font-size:13px">Zones</h2>
+<div class="l"><span class="d" style="background:#2563eb"></span><strong>A</strong> Pépinière / ombrière (100 m²)</div>
+<div class="l"><span class="d" style="background:#2a7d46"></span><strong>B</strong> Bananier plantain (400 m²)</div>
+<div class="l"><span class="d" style="background:#d97706"></span><strong>C</strong> Manioc & associé (300 m²)</div>
+<div class="l"><span class="d" style="background:#7c3aed"></span><strong>D</strong> Papayer & maraîchage (400 m²)</div>
+<div class="l"><span class="d" style="background:#92400e"></span><strong>E</strong> Habitat & chai (300 m²)</div>
+<p style="font-size:10px;color:#555;margin-top:8px">Cliquez sur une zone du terrain.</p></div>
+<div class="p" id="bud"><h2 style="margin:0 0 8px;font-size:13px">Budget indicatif</h2><div class="r"><span>Préparation & drainage</span><span>280k FCFA</span></div><div class="r"><span>Plants & semences</span><span>420k FCFA</span></div><div class="r"><span>Ombrière & outillage</span><span>185k FCFA</span></div><div class="r"><span>Compost & amendements</span><span>145k FCFA</span></div><div class="r"><span>Habitat léger & chai</span><span>295k FCFA</span></div><div class="r t"><span>Total</span><span>1 325 000 FCFA</span></div></div>
+<div class="p" id="info"><button class="x" onclick="hide()">×</button><div id="ib"></div></div>
+<div id="ctrl"><button onclick="rv()">Vue d'ensemble</button><button onclick="tv()">Vue de dessus</button></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="scene.js"></script></body></html>
