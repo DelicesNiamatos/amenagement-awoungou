@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aménagement Awoungou — Pilote</title>
-<script src="data.js?v=2"></script>
-<link rel="stylesheet" href="style.css?v=2">
+<script src="data.js?v=3"></script>
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body><canvas id="c"></canvas><div id="loading">Chargement du modèle 3D…</div><div id="error" style="display:none"></div><div id="ui" style="display:none">
 <header class="p"><div><h1>🌾 Ferme Niamatos Gabon — Pilote Awoungou</h1><p>Modèle 3D interactif • 1 500 m² • Owendo • Plan phasé</p></div><div><span class="c">🖱️ pivoter</span><span class="c">📜 zoomer</span><span class="c">👆 fiche</span></div></header>
@@ -17,5 +17,5 @@
 <div class="p" id="info"><button class="x" onclick="hide()">×</button><div id="ib"></div></div>
 <div id="ctrl"><button onclick="rv()">Vue d'ensemble</button><button onclick="tv()">Vue de dessus</button></div>
 </div>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module" src="scene.js?v=2"></script></body></html>
+<script type="module" src="scene.js?v=3" onerror="document.getElementById('loading').style.display='none';document.getElementById('error').style.display='block';document.getElementById('error').innerHTML='<strong>Erreur 3D</strong><br>Impossible de charger le moteur 3D. Vérifiez votre connexion ou essayez un autre navigateur (Chrome, Edge, Firefox, Safari récent).'"></script>
+<script>setTimeout(()=>{if(document.getElementById('loading').style.display!=='none'){document.getElementById('loading').innerHTML='Chargement trop long… <a href=\"https://delicesniamatos.github.io/amenagement-awoungou/?v=3\" style=\"color:#2563eb\">Recharger</a> ou essayez Ctrl+F5.'}},8000)</script></body></html>
