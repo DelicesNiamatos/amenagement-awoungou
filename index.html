@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aménagement Awoungou — Pilote</title>
-<script src="data.js?v=3"></script>
-<link rel="stylesheet" href="style.css?v=3">
+<script src="data.js?v=4"></script>
+<link rel="stylesheet" href="style.css?v=4">
 </head>
-<body><canvas id="c"></canvas><div id="loading">Chargement du modèle 3D…</div><div id="error" style="display:none"></div><div id="ui" style="display:none">
+<body><canvas id="c"></canvas><div id="loading">Chargement du modèle 3D…</div><div id="error" style="display:none"></div>
+<div id="ui" style="display:none">
 <header class="p"><div><h1>🌾 Ferme Niamatos Gabon — Pilote Awoungou</h1><p>Modèle 3D interactif • 1 500 m² • Owendo • Plan phasé</p></div><div><span class="c">🖱️ pivoter</span><span class="c">📜 zoomer</span><span class="c">👆 fiche</span></div></header>
 <div class="p" id="side"><h2 style="margin:0 0 8px;font-size:13px">Phases</h2><div id="ph"><button data-p="0" class="on">0 Diagnostic</button><button data-p="1">1 Pépinière</button><button data-p="2">2 Bananes/Manioc</button><button data-p="3">3 Papayers/Maraîchage</button><button data-p="4">4 Habitat</button></div>
 <h2 style="margin:10px 0 6px;font-size:13px">Zones</h2>
@@ -17,5 +18,25 @@
 <div class="p" id="info"><button class="x" onclick="hide()">×</button><div id="ib"></div></div>
 <div id="ctrl"><button onclick="rv()">Vue d'ensemble</button><button onclick="tv()">Vue de dessus</button></div>
 </div>
-<script type="module" src="scene.js?v=3" onerror="document.getElementById('loading').style.display='none';document.getElementById('error').style.display='block';document.getElementById('error').innerHTML='<strong>Erreur 3D</strong><br>Impossible de charger le moteur 3D. Vérifiez votre connexion ou essayez un autre navigateur (Chrome, Edge, Firefox, Safari récent).'"></script>
-<script>setTimeout(()=>{if(document.getElementById('loading').style.display!=='none'){document.getElementById('loading').innerHTML='Chargement trop long… <a href=\"https://delicesniamatos.github.io/amenagement-awoungou/?v=3\" style=\"color:#2563eb\">Recharger</a> ou essayez Ctrl+F5.'}},8000)</script></body></html>
+<div id="fallback2d">
+<div class="msg">Mode 2D de secours (WebGL/module 3D indisponible). Cliquez sur une zone.</div>
+<div class="map" id="map2d">
+<div class="zone" id="zoneA" style="left:15%;top:25%;width:20%;height:20%;background:#2563eb">A<br>Pépinière</div>
+<div class="zone" id="zoneB" style="left:55%;top:35%;width:30%;height:25%;background:#2a7d46">B<br>Bananier</div>
+<div class="zone" id="zoneC" style="left:20%;top:55%;width:25%;height:25%;background:#d97706">C<br>Manioc</div>
+<div class="zone" id="zoneD" style="left:55%;top:60%;width:28%;height:25%;background:#7c3aed">D<br>Papayer</div>
+<div class="zone" id="zoneE" style="left:40%;top:10%;width:25%;height:18%;background:#92400e">E<br>Habitat</div>
+<div class="legend">Zones A–E • 1 500 m² • Awoungou</div>
+</div>
+</div>
+<script type="module" src="scene.js?v=4"></script>
+<script>
+(function(){
+  const D=window.D;
+  function show2d(){const f=document.getElementById('fallback2d');if(f)f.style.display='flex';document.getElementById('loading').style.display='none';document.getElementById('ui').style.display='block';}
+  function card(id){const z=D[id];if(!z)return;let h='<h3 style="color:'+z.c+'">● Zone '+id+' — '+z.n+'</h3>';h+='<p><b>Surface:</b> '+z.s+' | <b>Phase:</b> '+z.p+'</p>';h+='<p><b>Items:</b> '+z.i+'</p>';h+='<p><b>Budget:</b> '+z.b+'</p>';h+='<p><b>Clés:</b> '+z.k+'</p>';h+='<p><b>Points à vérifier:</b></p><ul>'+z.w.split(',').map(x=>'<li>'+x.trim()+'</li>').join('')+'</ul>';document.getElementById('ib').innerHTML=h;document.getElementById('info').classList.add('on');}
+  ['A','B','C','D','E'].forEach(id=>{const el=document.getElementById('zone'+id);if(el)el.onclick=function(){card(id);};});
+  window.hide=function(){document.getElementById('info').classList.remove('on');};
+  setTimeout(function(){const l=document.getElementById('loading');if(l&&l.style.display!=='none'){show2d();}},5000);
+})();
+</script></body></html>
