@@ -1,23 +1,69 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aménagement Awoungou — Pilote</title>
-<script src="data.js?v=5"></script>
-<link rel="stylesheet" href="style.css?v=5">
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aménagement Awoungou — Pilote</title>
+<script src="data.js?v=6"></script>
+<link rel="stylesheet" href="style.css?v=6">
 </head>
-<body><canvas id="c"></canvas><div id="loading">Chargement du modèle 3D…</div><div id="error" style="display:none"></div>
+<body>
+<canvas id="c"></canvas>
+<div id="loading">Chargement du modèle 3D…</div>
+<div id="error" style="display:none"></div>
+
 <div id="ui" style="display:none">
-<header class="p"><div><h1>🌾 Ferme Niamatos Gabon — Pilote Awoungou</h1><p>Modèle 3D interactif • 1 500 m² • Owendo • Plan phasé</p></div><div><span class="c">🖱️ pivoter</span><span class="c">📜 zoomer</span><span class="c">👆 fiche</span></div></header>
-<div class="p" id="side"><h2 style="margin:0 0 8px;font-size:13px">Phases d'aménagement</h2><div id="ph"><button data-p="0" class="on">0 Diagnostic</button><button data-p="1">1 Pépinière</button><button data-p="2">2 Bananes/Manioc</button><button data-p="3">3 Papayers/Maraîchage</button><button data-p="4">4 Habitat</button></div>
+<header class="p">
+<div>
+<h1>🌾 Ferme Niamatos Gabon — Pilote Awoungou</h1>
+<p>Modèle 3D interactif • 1 500 m² • Owendo • Plan phasé</p>
+</div>
+<div>
+<span class="c">🖱️ pivoter</span>
+<span class="c">📜 zoomer</span>
+<span class="c">👆 fiche</span>
+</div>
+</header>
+
+<div class="p" id="side">
+<h2 style="margin:0 0 8px;font-size:13px">Phases d'aménagement</h2>
+<div id="ph">
+<button data-p="0" class="on">0 Diagnostic</button>
+<button data-p="1">1 Pépinière</button>
+<button data-p="2">2 Bananes/Manioc</button>
+<button data-p="3">3 Papayers/Maraîchage</button>
+<button data-p="4">4 Habitat</button>
+</div>
 <h2 style="margin:10px 0 6px;font-size:13px">Zones</h2>
 <div class="l"><span class="d" style="background:#2563eb"></span><strong>A</strong> Pépinière / ombrière (100 m²)</div>
 <div class="l"><span class="d" style="background:#2a7d46"></span><strong>B</strong> Bananier plantain (400 m²)</div>
 <div class="l"><span class="d" style="background:#d97706"></span><strong>C</strong> Manioc & associé (300 m²)</div>
 <div class="l"><span class="d" style="background:#7c3aed"></span><strong>D</strong> Papayer & maraîchage (400 m²)</div>
 <div class="l"><span class="d" style="background:#92400e"></span><strong>E</strong> Habitat & chai (300 m²)</div>
-<p style="font-size:10px;color:#555;margin-top:8px">Cliquez sur une zone du terrain pour voir sa fiche technique.</p></div>
-<div class="p" id="bud"><h2 style="margin:0 0 8px;font-size:13px">Budget indicatif</h2><div class="r"><span>Préparation & drainage</span><span>280k FCFA</span></div><div class="r"><span>Plants & semences</span><span>420k FCFA</span></div><div class="r"><span>Ombrière & outillage</span><span>185k FCFA</span></div><div class="r"><span>Compost & amendements</span><span>145k FCFA</span></div><div class="r"><span>Habitat léger & chai</span><span>295k FCFA</span></div><div class="r t"><span>Total</span><span>1 325 000 FCFA</span></div></div>
-<div class="p" id="info"><button class="x" onclick="hide()">×</button><div id="ib"></div></div>
-<div id="ctrl"><button onclick="rv()">Vue d'ensemble</button><button onclick="tv()">Vue de dessus</button></div>
+<p style="font-size:10px;color:#555;margin-top:8px">Cliquez sur une zone du terrain pour voir sa fiche technique.</p>
 </div>
+
+<div class="p" id="bud">
+<h2 style="margin:0 0 8px;font-size:13px">Budget indicatif</h2>
+<div class="r"><span>Préparation & drainage</span><span>280k FCFA</span></div>
+<div class="r"><span>Plants & semences</span><span>420k FCFA</span></div>
+<div class="r"><span>Ombrière & outillage</span><span>185k FCFA</span></div>
+<div class="r"><span>Compost & amendements</span><span>145k FCFA</span></div>
+<div class="r"><span>Habitat léger & chai</span><span>295k FCFA</span></div>
+<div class="r t"><span>Total</span><span>1 325 000 FCFA</span></div>
+</div>
+
+<div class="p" id="info">
+<button class="x" onclick="typeof hide==='function'&&hide()">×</button>
+<div id="ib"></div>
+</div>
+
+<div id="ctrl">
+<button onclick="typeof rv==='function'&&rv()">Vue d'ensemble</button>
+<button onclick="typeof tv==='function'&&tv()">Vue de dessus</button>
+</div>
+</div>
+
 <div id="fallback2d">
 <div class="msg">Mode 2D interactif de secours (WebGL 3D indisponible sur cet appareil). Cliquez sur une zone.</div>
 <div class="map" id="map2d">
@@ -29,16 +75,67 @@
 <div class="legend">Zones A–E • 1 500 m² • Awoungou</div>
 </div>
 </div>
-<script type="module" src="scene.js?v=5"></script>
+
+<script type="module" src="scene.js?v=6"></script>
 <script>
 (function(){
-  const D=window.D;
-  function show2d(){const f=document.getElementById('fallback2d');if(f)f.style.display='flex';document.getElementById('loading').style.display='none';document.getElementById('ui').style.display='block';}
-  function card(id){const z=D[id];if(!z)return;let h='<h3 style="color:'+z.c+'">● Zone '+id+' — '+z.n+'</h3>';h+='<p><b>Surface:</b> '+z.s+' | <b>Phase:</b> '+z.p+'</p>';h+='<p><b>Items:</b> '+z.i+'</p>';h+='<p><b>Budget:</b> '+z.b+'</p>';h+='<p><b>Clés:</b> '+z.k+'</p>';h+='<p><b>Points à vérifier:</b></p><ul>'+z.w.split(',').map(x=>'<li>'+x.trim()+'</li>').join('')+'</ul>';document.getElementById('ib').innerHTML=h;document.getElementById('info').classList.add('on');}
-  document.querySelectorAll('#fallback2d .zone').forEach(el=>{el.onclick=function(){card(el.dataset.id);};});
-  window.hide=function(){document.getElementById('info').classList.remove('on');};
-  function setPhase2d(p){document.querySelectorAll('#fallback2d .zone').forEach(el=>{const id=el.dataset.id;const phase=D[id]?D[id].p:0;el.style.opacity=p>=phase?'1':'0.35';});document.querySelectorAll('#ph button').forEach(b=>b.classList.toggle('on',+b.dataset.p===p));}
-  document.querySelectorAll('#ph button').forEach(b=>{b.addEventListener('click',function(){setPhase2d(+this.dataset.p);});});
-  setTimeout(function(){const l=document.getElementById('loading');if(l&&l.style.display!=='none'){show2d();}},5000);
+  const D = window.D;
+  window._3dLoaded = false;
+  window._3dError = null;
+
+  function show2d(){
+    const f = document.getElementById('fallback2d');
+    if (f) f.style.display = 'flex';
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('ui').style.display = 'block';
+  }
+
+  function card(id){
+    const z = D[id];
+    if (!z) return;
+    let h = '<h3 style="color:' + z.c + '">● Zone ' + id + ' — ' + z.n + '</h3>';
+    h += '<p><b>Surface:</b> ' + z.s + ' | <b>Phase:</b> ' + z.p + '</p>';
+    h += '<p><b>Items:</b> ' + z.i + '</p>';
+    h += '<p><b>Budget:</b> ' + z.b + '</p>';
+    h += '<p><b>Clés:</b> ' + z.k + '</p>';
+    h += '<p><b>Points à vérifier:</b></p><ul>' + z.w.split(',').map(function(x){ return '<li>' + x.trim() + '</li>'; }).join('') + '</ul>';
+    document.getElementById('ib').innerHTML = h;
+    document.getElementById('info').classList.add('on');
+  }
+
+  window.hide = function(){ document.getElementById('info').classList.remove('on'); };
+
+  document.querySelectorAll('#fallback2d .zone').forEach(function(el){
+    el.onclick = function(){ card(el.dataset.id); };
+  });
+
+  function setPhase2d(p){
+    document.querySelectorAll('#fallback2d .zone').forEach(function(el){
+      const id = el.dataset.id;
+      const phase = D[id] ? D[id].p : 0;
+      el.style.opacity = p >= phase ? '1' : '0.35';
+    });
+    document.querySelectorAll('#ph button').forEach(function(b){
+      b.classList.toggle('on', +b.dataset.p === p);
+    });
+  }
+
+  document.querySelectorAll('#ph button').forEach(function(b){
+    b.addEventListener('click', function(){ setPhase2d(+this.dataset.p); });
+  });
+  setPhase2d(0);
+
+  // Surveillance de l'échec du chargement 3D : on n'affiche le mode 2D
+  // que si la scène n'a pas démarré après un délai raisonnable.
+  setTimeout(function(){
+    if (!window._3dLoaded) {
+      const msg = window._3dError ? window._3dError : 'La scène 3D n\'a pas démarré (délai ou WebGL indisponible).';
+      const e = document.getElementById('error');
+      if (e) { e.style.display = 'block'; e.innerHTML = '<strong>Mode 2D activé</strong><br>' + msg; }
+      show2d();
+    }
+  }, 15000);
 })();
-</script></body></html>
+</script>
+</body>
+</html>

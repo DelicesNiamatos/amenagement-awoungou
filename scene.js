@@ -1,7 +1,8 @@
-import * as T from 'https://esm.sh/three@0.160.0';
-import { OrbitControls } from 'https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import * as T from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
 const DATA = window.D;
+
 const err = (msg) => {
   const e = document.getElementById('error');
   const l = document.getElementById('loading');
@@ -9,8 +10,10 @@ const err = (msg) => {
   if (e) { e.style.display = 'block'; e.innerHTML = '<strong>Erreur 3D</strong><br>' + msg; }
   if (l) l.style.display = 'none';
   if (u) u.style.display = 'none';
+  window._3dError = msg;
   console.error(msg);
 };
+
 const ok = () => {
   const l = document.getElementById('loading');
   const u = document.getElementById('ui');
@@ -19,6 +22,7 @@ const ok = () => {
   if (u) u.style.display = 'block';
   if (f) f.style.display = 'none';
   window._3dLoaded = true;
+  window._3dError = null;
 };
 
 try {
@@ -33,9 +37,9 @@ try {
   try {
     renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: false });
   } catch (glErr) {
-    throw new Error('WebGL non disponible sur ce navigateur : ' + glErr.message);
+    throw new Error('WebGL non disponible sur ce navigateur : ' + (glErr.message || glErr));
   }
-  renderer.setSize(innerWidth, innerHeight);
+  renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
 
@@ -43,7 +47,7 @@ try {
   scene.background = new T.Color(0xe8e6e1);
   scene.fog = new T.Fog(0xe8e6e1, 15, 60);
 
-  const camera = new T.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 100);
+  const camera = new T.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
   camera.position.set(18, 14, 18);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -89,77 +93,4 @@ try {
   }
   addZone('A', -6, 3, 4, 5, 0.2);
   addZone('B', 3, 2, 8, 6, 0.2);
-  addZone('C', -5, -5, 6, 6, 0.2);
-  addZone('D', 4, -5, 7, 6, 0.2);
-  addZone('E', 0, 8, 6, 4, 0.2);
-
-  const items = {};
-  const cone = new T.ConeGeometry(0.25, 1, 6);
-  const box = new T.BoxGeometry(0.4, 0.4, 0.4);
-  function placeItems(id, n, ht, geom) {
-    const a = [];
-    const zone = zones.find(z => z.id === id);
-    for (let i = 0; i < n; i++) {
-      const m = new T.Mesh(geom, new T.MeshStandardMaterial({ color: 0x228b22 }));
-      m.castShadow = true;
-      m.position.set(
-        zone.group.position.x + (Math.random() - 0.5) * zone.box.geometry.parameters.width * 0.8,
-        ht / 2 + zone.H / 2,
-        zone.group.position.z + (Math.random() - 0.5) * zone.box.geometry.parameters.depth * 0.8
-      );
-      m.scale.set(0.6, 0.6, 0.6);
-      m.visible = false;
-      scene.add(m);
-      a.push(m);
-    }
-    items[id] = a;
-  }
-  placeItems('A', 12, 0.5, cone);
-  placeItems('B', 18, 1.2, cone);
-  placeItems('C', 10, 0.8, cone);
-  placeItems('D', 14, 1, cone);
-  placeItems('E', 1, 1.5, box);
-
-  function setPhase(p) {
-    document.querySelectorAll('#ph button').forEach(b => b.classList.toggle('on', +b.dataset.p === p));
-    Object.keys(items).forEach(k => items[k].forEach(m => m.visible = p >= DATA[k].p));
-  }
-  setPhase(0);
-
-  const ray = new T.Raycaster();
-  const mouse = new T.Vector2();
-  window.addEventListener('pointerdown', e => {
-    if (e.target.closest('button') || e.target.closest('.p')) return;
-    mouse.x = (e.clientX / innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / innerHeight) * 2 + 1;
-    ray.setFromCamera(mouse, camera);
-    const hits = ray.intersectObjects(zones.map(z => z.box));
-    if (hits.length) {
-      const z = DATA[hits[0].object.userData.id];
-      let html = '<h3 style="color:' + z.c + '">● Zone ' + hits[0].object.userData.id + ' — ' + z.n + '</h3>';
-      html += '<p><b>Surface:</b> ' + z.s + ' | <b>Phase:</b> ' + z.p + '</p>';
-      html += '<p><b>Items:</b> ' + z.i + '</p>';
-      html += '<p><b>Budget:</b> ' + z.b + '</p>';
-      html += '<p><b>Clés:</b> ' + z.k + '</p>';
-      html += '<p><b>Points à vérifier:</b></p><ul>' + z.w.split(',').map(x => '<li>' + x.trim() + '</li>').join('') + '</ul>';
-      document.getElementById('ib').innerHTML = html;
-      document.getElementById('info').classList.add('on');
-    }
-  });
-
-  window.hide = function () { document.getElementById('info').classList.remove('on'); };
-  window.rv = function () { camera.position.set(18, 14, 18); controls.target.set(0, 0, 0); controls.update(); };
-  window.tv = function () { camera.position.set(0, 25, 0); controls.target.set(0, 0, 0); controls.update(); };
-  document.querySelectorAll('#ph button').forEach(b => b.onclick = () => setPhase(+b.dataset.p));
-  window.addEventListener('resize', () => {
-    camera.aspect = innerWidth / innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight);
-  });
-
-  function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
-  animate();
-  ok();
-} catch (e) {
-  err(e.message);
-}
+  addZone('C', -5, -
