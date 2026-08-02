@@ -14,42 +14,51 @@ Modèle 3D interactif du terrain aménagé du projet **Ferme Niamatos Gabon — 
 
 - Vue 3D interactive du terrain avec les 5 zones (A → E)
 - Sélecteur de phase (0 à 4) pour visualiser l'évolution du chantier
-- Fiches techniques "bulles de conversation" au clic sur chaque zone
-- Légende, contrôles de caméra (zoom, rotation), mode sombre automatique
+- Fiches techniques au clic sur chaque zone
+- Légende, contrôles de caméra (zoom, rotation)
+- Mode 2D interactif de secours si WebGL 3D est indisponible
+
+## Dépendances
+
+Le modèle 3D utilise **Three.js** chargé depuis un CDN public :
+
+- `https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js`
+- `https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js`
 
 ## Zones modélisées
 
 | Zone | Surface | Culture / usage | Phase d'apparition |
 |------|---------|-----------------|-------------------|
 | A | 100 m² | Pépinière / ombrière | 1 |
-| B | 700 m² | Bananier plantain + manioc | 2 |
-| C | 400 m² | Papayer + gombo + arachide + maïs | 3 |
-| D | 250 m² | Habitat temporaire recyclé | 4 |
-| E | 50 m² | Arbre préservé + allée | 0 |
+| B | 400 m² | Bananier plantain | 2 |
+| C | 300 m² | Manioc & associé | 2 |
+| D | 400 m² | Papayer & maraîchage | 3 |
+| E | 300 m² | Habitat & chai | 4 |
 
 ## Phases
 
-1. **Phase 0** — Diagnostic, nettoyage & piquetage
-2. **Phase 1** — Pépinière, compost & irrigation artisanale
+1. **Phase 0** — Diagnostic, nettoyage & piquetage (aucune zone visible)
+2. **Phase 1** — Pépinière, ombrière & irrigation
 3. **Phase 2** — Plantation bananier plantain & manioc
 4. **Phase 3** — Plantation papayer & maraîchage intercalaire
-5. **Phase 4** — Habitat temporaire recyclé & consolidation
+5. **Phase 4** — Habitat léger, chai & consolidation
 
 ## Hébergement GitHub Pages
 
-Ce dépôt est publié avec **GitHub Pages** : le site sera accessible à `https://delicesniamatos.github.io/amenagement-awoungou/` une fois le workflow terminé.
-
-## Développement local
-
-Ouvrir simplement `index.html` dans un navigateur moderne. Le modèle est autonome (CSS 3D, pas de dépendance externe).
+Ce dépôt est publié avec **GitHub Pages** : `https://delicesniamatos.github.io/amenagement-awoungou/`
 
 ## Structure
 
 ```
 .
-├── index.html   # Modèle 3D interactif autonome
-├── README.md    # Ce fichier
-└── .gitignore   # Fichiers à ignorer
+├── index.html              # Page principale et UI
+├── scene.js                # Scène 3D Three.js
+├── data.js                 # Données des zones et budget
+├── style.css               # Styles et responsive
+├── CNAME                   # Domaine personnalisé (delicesniamatos.com)
+├── README.md               # Ce fichier
+└── .github/workflows/      # Déploiement automatique
+    └── static.yml
 ```
 
 ## Licence
