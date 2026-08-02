@@ -1,64 +1,83 @@
 # Aménagement Awoungou — Pilote Culture
 
-Modèle 3D interactif du terrain aménagé du projet **Ferme Niamatos Gabon — Pilote Awoungou**.
+Maquette 3D interactive du terrain aménagé du projet **Ferme Niamatos Gabon — Pilote Awoungou**.
 
 ## À propos
 
-- **Superficie** : 1 500 m² (bail familial à Owendo, Gabon)
+- **Superficie** : 1 500 m² (30 m × 50 m, bail familial à Owendo, Gabon)
 - **Projet** : Délices Niamatos / Ferme Niamatos Gabon SARL
 - **Données source** : Plan de culture et d'aménagement phasé du pilote Awoungou (Notion — DN OS)
-- **Modèle original** : Conçu dans Claude Design (Claude IA)
-- **Déploiement** : GitHub Pages via GitHub Actions
+- **Modèle** : Conçu avec Three.js (rendu 3D WebGL)
+- **Déploiement** : GitHub Pages
 
-## Fonctionnalités
+## 🌐 Voir la maquette en ligne
 
-- Vue 3D interactive du terrain avec les 5 zones (A → E)
-- Sélecteur de phase (0 à 4) pour visualiser l'évolution du chantier
-- Fiches techniques au clic sur chaque zone
-- Légende, contrôles de caméra (zoom, rotation)
-- Mode 2D interactif de secours si WebGL 3D est indisponible
+**https://DelicesNiamatos.github.io/amenagement-awoungou/**
+
+## Contrôles
+
+- **Clic + drag** : tourner la caméra autour du terrain
+- **Molette** : zoomer / dézoomer
+- **Clic sur une zone** : ouvrir la fiche technique (surface, phase, budget, description)
+- **Boutons de phase** (0 à 4) : faire apparaître les zones au fil du chantier
+- **Boutons de vue** : vue d'ensemble, vue de dessus, vue habitat
+
+## Ce qui est modélisé en 3D
+
+- Terrain de 1 500 m² avec muret existant, clôture grillagée sur poteaux de bambou et haie anti-intrusion
+- 5 bandes fonctionnelles (A → E) avec cultures et aménagements
+- Deux conteneurs maritimes 20′ sur pilotis (hauteur libre 3 m)
+- Salon connecteur central de 3,5 m avec grandes baies vitrées
+- Module étage (≈ 8,4 m) + balcon-terrasse (3,5 × 8,4 m) avec canopée anti-soleil
+- Cuisine extérieure, garde-manger et douche/toilette invités sous la structure
+- Atelier conteneur avec serre polycarbonate sur toiture (≈ 5,6 × 2,2 m)
+- Puits traditionnel, pompe solaire, réservoir et réseau de distribution
+- Centrale photovoltaïque au sol avec batteries/onduleur
+
+## Zones modélisées
+
+| Zone | Surface | Usage | Phase d'apparition |
+|------|---------|-------|-------------------|
+| A | 100 m² | Pépinière, compost, puits | 1 |
+| B | 350 m² | Bananier plantain (associé) | 2 |
+| B' | 350 m² | Manioc (intercalaire) | 2 |
+| C | 400 m² | Papayer & maraîchage | 3 |
+| D | 250 m² | Habitat conteneurs + atelier | 4 |
+| E | 50 m² | Arbre préservé + bambouseraie | 0 |
+
+## Budget de référence
+
+| Phase | Contenu | Montant |
+|-------|---------|---------|
+| 0 | Diagnostic, clôture | 460 000 FCFA |
+| 1 | Pépinière, compost | 165 000 FCFA |
+| 2 | Bananes & manioc | 50 000 FCFA |
+| 3 | Papayers & maraîchage | 45 000 FCFA |
+| 4 | Habitat, atelier, énergie | 6 250 000 FCFA |
+| **Total** | Phases 0–4 | **≈ 7 935 000 FCFA** |
+
+≈ 19 590 CAD (taux indicatif : 1 CAD = 405 FCFA)
 
 ## Dépendances
 
 Le modèle 3D utilise **Three.js** chargé depuis un CDN public :
 
-- `https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js`
-- `https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js`
-
-## Zones modélisées
-
-| Zone | Surface | Culture / usage | Phase d'apparition |
-|------|---------|-----------------|-------------------|
-| A | 100 m² | Pépinière / ombrière | 1 |
-| B | 400 m² | Bananier plantain | 2 |
-| C | 300 m² | Manioc & associé | 2 |
-| D | 400 m² | Papayer & maraîchage | 3 |
-| E | 300 m² | Habitat & chai | 4 |
-
-## Phases
-
-1. **Phase 0** — Diagnostic, nettoyage & piquetage (aucune zone visible)
-2. **Phase 1** — Pépinière, ombrière & irrigation
-3. **Phase 2** — Plantation bananier plantain & manioc
-4. **Phase 3** — Plantation papayer & maraîchage intercalaire
-5. **Phase 4** — Habitat léger, chai & consolidation
-
-## Hébergement GitHub Pages
-
-Ce dépôt est publié avec **GitHub Pages** : `https://delicesniamatos.github.io/amenagement-awoungou/`
+- `https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js`
+- `https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js`
 
 ## Structure
 
 ```
 .
 ├── index.html              # Page principale et UI
-├── scene.js                # Scène 3D Three.js
-├── data.js                 # Données des zones et budget
-├── style.css               # Styles et responsive
-├── CNAME                   # Domaine personnalisé (delicesniamatos.com)
-├── README.md               # Ce fichier
-└── .github/workflows/      # Déploiement automatique
-    └── static.yml
+├── data.js                 # Données des zones, dimensions et budget
+├── core.js                 # Scène Three.js, matériaux, terrain, clôtures
+├── zones.js                # Création des 5 zones cliquables
+├── habitat.js              # Habitat conteneurs sur pilotis
+├── workshop.js             # Atelier et serre polycarbonate
+├── solar.js                # Centrale solaire, puits, eau
+├── ui.js                   # Interface, tooltips, sélecteur de phase
+└── README.md               # Ce fichier
 ```
 
 ## Licence
