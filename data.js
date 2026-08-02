@@ -17,4 +17,13 @@ DNA.ZONES = {
   habitat: { name: 'Habitat + atelier (D)', sub: 'Conteneurs sur pilotis', area: '250 m²', color: 0x92400e, phase: 4, x: -4, z: 18, w: 16, d: 12, info: 'Deux conteneurs 20\' sur pilotis (hauteur libre 3 m), connecteur central (salon), module étage + balcon, atelier avec serre de toiture, cuisine, garde-manger et douche invités sous la structure.', items: '2 conteneurs 6×2,44×2,59 m, salon 3,5 m, module étage 8,4 m, balcon, atelier 20\', serre, centrale solaire, puits', budget: '6 250 000 FCFA' },
   preserved: { name: 'Arbre préservé + bambouseraie (E)', sub: 'Ombrage & matériau', area: '50 m²', color: DNA.COLORS.preservedTree, phase: 0, x: 10, z: 18, w: 5, d: 10, info: 'Arbre mature conservé pour l\'ombrage et la régénération naturelle. Bambouseraie d\'appoint (Bambusa vulgaris, non traçant) pour le matériau de construction et la clôture.', items: 'Arbre préservé, bambouseraie d\'appoint, allée d\'accès', budget: '45 000 FCFA' }
 };
-DNA.H
+DNA.HABITAT = {
+  c20: { l: 6, w: 2.44, h: 2.59 },
+  gap: 3.5,
+  groundClearance: 3.0,
+  upperL: 8.4,
+  upperW: 2.44,
+  upperH: 2.59,
+  terraceW: 3.5,
+  terraceL: 8.4
+};
