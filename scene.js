@@ -11,6 +11,7 @@ const err = (msg) => {
   if (l) l.style.display = 'none';
   if (u) u.style.display = 'none';
   window._3dError = msg;
+  window._3dLoaded = false;
   console.error(msg);
 };
 
@@ -80,7 +81,7 @@ try {
     group.position.set(x, H / 2, z);
     const box = new T.Mesh(
       new T.BoxGeometry(W, H, depth),
-      new T.MeshStandardMaterial({ color: d.c, transparent: true, opacity: 0.85, roughness: 0.7 })
+      new T.MeshStandardMaterial({ color: new T.Color(d.c), transparent: true, opacity: 0.85, roughness: 0.7 })
     );
     box.castShadow = true;
     box.receiveShadow = true;
@@ -91,6 +92,5 @@ try {
     group.add(new T.LineSegments(edges, new T.LineBasicMaterial({ color: 0x333333 })));
     scene.add(group);
   }
-  addZone('A', -6, 3, 4, 5, 0.2);
-  addZone('B', 3, 2, 8, 6, 0.2);
-  addZone('C', -5, -
+
+  addZone('A', -6, 3, 
