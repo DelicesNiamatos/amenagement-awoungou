@@ -46,4 +46,18 @@ D.createZones = function() {
       const beam1 = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.8, 8), D.materials.wood);
       beam1.position.set(-0.5, 1.4, 0); beam1.rotation.z = Math.PI / 6;
       const beam2 = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.8, 8), D.materials.wood);
-      beam2.position.set(0.5, 1.
+      beam2.position.set(0.5, 1.4, 0); beam2.rotation.z = -Math.PI / 6;
+      frame.add(beam1, beam2); frame.position.set(z.x - 2, 0, z.z - 3); group.add(frame);
+    } else if (key === 'preserved') {
+      const tree = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.35, 4, 12), new THREE.MeshStandardMaterial({ color: D.COLORS.preservedTree }));
+      tree.position.set(z.x, 2, z.z - 1); tree.castShadow = true; group.add(tree);
+      const crown = new THREE.Mesh(new THREE.SphereGeometry(2.2, 16, 12), new THREE.MeshStandardMaterial({ color: D.COLORS.preservedTree }));
+      crown.position.set(z.x, 4.5, z.z - 1); crown.castShadow = true; group.add(crown);
+      for (let k = 0; k < 8; k++) {
+        const b = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.06, 2.5, 8), new THREE.MeshStandardMaterial({ color: D.COLORS.bamboo }));
+        b.position.set(z.x + (Math.random()-0.5)*3, 1.25, z.z + 2 + (Math.random()-0.5)*2); b.castShadow = true; group.add(b);
+      }
+    }
+    D.scene.add(group); D.register(group, z.phase); D.label(z.name, z.x, 0.6, z.z, 0.8);
+  });
+};
