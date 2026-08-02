@@ -14,8 +14,11 @@ const err = (msg) => {
 const ok = () => {
   const l = document.getElementById('loading');
   const u = document.getElementById('ui');
+  const f = document.getElementById('fallback2d');
   if (l) l.style.display = 'none';
   if (u) u.style.display = 'block';
+  if (f) f.style.display = 'none';
+  window._3dLoaded = true;
 };
 
 try {
