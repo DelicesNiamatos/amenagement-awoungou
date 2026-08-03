@@ -1,5 +1,5 @@
 window.DNA = window.DNA || {};
-const D = DNA;
+var D = DNA;
 D.createSolarAndWater = function() {
   const g = new THREE.Group(); const sx = 8, sz = 18;
   for (let r = 0; r < 3; r++) {
