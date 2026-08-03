@@ -1,5 +1,5 @@
 window.DNA = window.DNA || {};
-const D = DNA;
+var D = DNA;
 D.createWorkshop = function() {
   const w = new THREE.Group(); const c = D.HABITAT;
   const wx = D.ZONES.habitat.x - 10; const wz = D.ZONES.habitat.z + 4; const angle = Math.PI / 6;
