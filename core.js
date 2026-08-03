@@ -1,5 +1,5 @@
 window.DNA = window.DNA || {};
-const D = DNA;
+var D = DNA;
 D.canvas = document.getElementById('canvas');
 D.scene = new THREE.Scene();
 D.scene.background = new THREE.Color(0xf9f8f7);
@@ -109,4 +109,52 @@ D.createTerrain = function() {
       const px = s.w > s.d ? -s.w/2 + s.w * t : s.x;
       const pz = s.d > s.w ? -s.d/2 + s.d * t : s.z;
       const post = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 1.8, 8), postMat);
-      post.position.set(px, 0.9, pz); post.castShadow = true;
+      post.position.set(px, 0.9, pz); post.castShadow = true; fenceGroup.add(post);
+    }
+    const wire = new THREE.Mesh(new THREE.BoxGeometry(s.w, 1.2, s.d), new THREE.MeshStandardMaterial({ color: D.COLORS.fenceWire, transparent: true, opacity: 0.25, wireframe: true }));
+    wire.position.set(s.x, 1.0, s.z); fenceGroup.add(wire);
+    const hedgeH = 1.2;
+    const hedge = new THREE.Mesh(new THREE.BoxGeometry(s.w > s.d ? s.w - 0.6 : 0.8, hedgeH, s.w > s.d ? 0.8 : s.d - 0.6), hedgeMat);
+    const hedgeX = s.x > 0 ? s.x - 0.5 : (s.x < 0 ? s.x + 0.5 : s.x);
+    const hedgeZ = s.z > 0 ? s.z - 0.5 : (s.z < 0 ? s.z + 0.5 : s.z);
+    hedge.position.set(hedgeX, hedgeH/2, hedgeZ); hedge.castShadow = true; fenceGroup.add(hedge);
+  });
+  D.scene.add(fenceGroup); D.register(fenceGroup, 0);
+  const gateZ = D.L/2 - 0.15;
+  const gate = new THREE.Mesh(new THREE.BoxGeometry(3.6, 2.0, 0.15), new THREE.MeshStandardMaterial({ color: D.COLORS.fencePost }));
+  gate.position.set(0, 1.0, gateZ); gate.castShadow = true; D.scene.add(gate);
+  const sign = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.7, 0.06), new THREE.MeshStandardMaterial({ color: 0x374151 }));
+  sign.position.set(0, 1.6, gateZ + 0.2); sign.castShadow = true; D.scene.add(sign);
+};
+D.boot = function() {
+  try {
+    D.createTerrain();
+    D.createZones();
+    D.createHabitat();
+    D.createWorkshop();
+    D.createSolarAndWater();
+    D.initUI();
+    document.getElementById('loading').style.display = 'none';
+    D.animate();
+  } catch (e) {
+    console.error('DNA boot error:', e);
+    document.getElementById('fallback').classList.add('on');
+    document.getElementById('loading').style.display = 'none';
+  }
+};
+D.animate = function() {
+  requestAnimationFrame(D.animate);
+  D.controls.update();
+  D.renderer.render(D.scene, D.camera);
+};
+D.viewHome = function() { D.camera.position.set(35, 25, 45); D.controls.target.set(0, 2, 0); D.controls.update(); };
+D.viewTop = function() { D.camera.position.set(0, 55, 0); D.controls.target.set(0, 0, 0); D.controls.update(); };
+D.viewHabitat = function() { D.camera.position.set(-8, 10, 28); D.controls.target.set(-4, 2, 18); D.controls.update(); };
+D.setPhase = function(p) {
+  Object.values(D.phaseGroups).forEach(arr => arr.forEach(g => { g.visible = false; }));
+  for (let i = 0; i <= p; i++) {
+    (D.phaseGroups[i] || []).forEach(g => { g.visible = true; });
+  }
+  document.querySelectorAll('#phases button').forEach(btn => { btn.classList.toggle('on', +btn.dataset.p === p); });
+};
+D.hideInfo = function() { document.getElementById('info').classList.remove('on'); };
