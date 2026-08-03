@@ -109,12 +109,4 @@ D.createTerrain = function() {
       const px = s.w > s.d ? -s.w/2 + s.w * t : s.x;
       const pz = s.d > s.w ? -s.d/2 + s.d * t : s.z;
       const post = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 1.8, 8), postMat);
-      post.position.set(px, 0.9, pz); post.castShadow = true; fenceGroup.add(post);
-    }
-    const wire = new THREE.Mesh(new THREE.BoxGeometry(s.w, 1.2, s.d), new THREE.MeshStandardMaterial({ color: D.COLORS.fenceWire, transparent: true, opacity: 0.25, wireframe: true }));
-    wire.position.set(s.x, 1.0, s.z); fenceGroup.add(wire);
-    const hedgeH = 1.2;
-    const hedge = new THREE.Mesh(new THREE.BoxGeometry(s.w > s.d ? s.w - 0.6 : 0.8, hedgeH, s.w > s.d ? 0.8 : s.d - 0.6), hedgeMat);
-    const hedgeX = s.x > 0 ? s.x - 0.5 : (s.x < 0 ? s.x + 0.5 : s.x);
-    const hedgeZ = s.z > 0 ? s.z - 0.5 : (s.z < 0 ? s.z + 0.5 : s.z);
-    hedge.position.set(hedgeX, hedgeH/2, hedgeZ); hedge.castShadow =
+      post.position.set(px, 0.9, pz); post.castShadow = true;
