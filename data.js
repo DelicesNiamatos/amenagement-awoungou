@@ -23,7 +23,4 @@ DNA.HABITAT = {
   groundClearance: 3.0,
   upperL: 8.4,
   upperW: 2.44,
-  upperH: 2.59,
-  terraceW: 3.5,
-  terraceL: 8.4
-};
+ 
