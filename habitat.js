@@ -1,5 +1,5 @@
 window.DNA = window.DNA || {};
-const D = DNA;
+var D = DNA;
 D.createHabitat = function() {
   const h = new THREE.Group();
   const c = D.HABITAT;
