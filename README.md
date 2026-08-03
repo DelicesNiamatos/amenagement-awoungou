@@ -14,6 +14,8 @@ Maquette 3D interactive du terrain aménagé du projet **Ferme Niamatos Gabon �
 
 **https://DelicesNiamatos.github.io/amenagement-awoungou/**
 
+> Conseil : si vous aviez ouvert la page avant la réparation, forcez l'actualisation du cache (`Ctrl + F5` ou `Cmd + Shift + R`) pour charger les derniers fichiers JavaScript.
+
 ## Contrôles
 
 - **Clic + drag** : tourner la caméra autour du terrain
@@ -60,10 +62,10 @@ Maquette 3D interactive du terrain aménagé du projet **Ferme Niamatos Gabon �
 
 ## Dépendances
 
-Le modèle 3D utilise **Three.js** chargé depuis un CDN public :
+Le modèle 3D utilise **Three.js r128** chargé depuis un CDN public :
 
-- `https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js`
-- `https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js`
+- `https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js`
+- `https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js`
 
 ## Structure
 
