@@ -2,7 +2,7 @@ window.DNA = window.DNA || {};
 var D = DNA;
 D.createWorkshop = function() {
   const w = new THREE.Group(); const c = D.HABITAT;
-  const wx = D.ZONES.habitat.x - 10; const wz = D.ZONES.habitat.z + 4; const angle = Math.PI / 6;
+  const wx = 9; const wz = -14; const angle = 0;
   const cont = new THREE.Mesh(new THREE.BoxGeometry(c.c20.l, c.c20.h, c.c20.w), D.materials.foam); cont.position.set(wx, c.c20.h/2, wz); cont.rotation.y = angle; cont.castShadow = true; cont.receiveShadow = true; w.add(cont);
   const door = new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.0, 0.08), D.materials.steel); door.position.set(wx - c.c20.l/2 + 1.4, 1.0, wz); door.rotation.y = angle; w.add(door);
   const bench = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 0.6), D.materials.wood); bench.position.set(wx - 0.5, 0.4, wz + 0.6); bench.rotation.y = angle; w.add(bench);
