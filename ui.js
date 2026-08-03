@@ -38,6 +38,14 @@ D.initUI = function() {
   window.addEventListener('resize', () => {
     D.camera.aspect = window.innerWidth / window.innerHeight; D.camera.updateProjectionMatrix(); D.renderer.setSize(window.innerWidth, window.innerHeight);
   });
+  const fsToggle = document.getElementById('fsToggle');
+  if (fsToggle) {
+    fsToggle.addEventListener('click', () => setTimeout(() => {
+      D.camera.aspect = window.innerWidth / window.innerHeight;
+      D.camera.updateProjectionMatrix();
+      D.renderer.setSize(window.innerWidth, window.innerHeight);
+    }, 50));
+  }
 };
 D.showInfo = function(id) {
   const z = D.ZONES[id]; if (!z) return;
