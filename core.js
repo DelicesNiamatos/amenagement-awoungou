@@ -64,27 +64,26 @@ D.makePlane = function(w, d, mat, x, y, z, rx) {
   return D.addMesh(g);
 };
 D.label = function(text, x, y, z, size) {
-  const c = document.createElement('canvas');
-  c.width = 512; c.height = 128;
-  const ctx = c.getContext('2d');
-  ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.roundRect(10, 10, 492, 108, 16);
-  ctx.fill();
-  ctx.fillStyle = '#2c2c2b';
-  ctx.font = 'bold 42px system-ui, sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText(text, 256, 64);
-  const tex = new THREE.CanvasTexture(c);
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
-  sprite.position.set(x, y, z);
-  sprite.scale.set((size || 0.6) * 4, size || 0.6, 1);
-  D.scene.add(sprite);
-  return sprite;
+  try {
+    const c = document.createElement('canvas');
+    c.width = 512; c.height = 128;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    if (ctx.roundRect) { ctx.roundRect(10, 10, 492, 108, 16); ctx.fill(); }
+    else { ctx.fillRect(10, 10, 492, 108); }
+    ctx.fillStyle = '#2c2c2b';
+    ctx.font = 'bold 42px system-ui, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(text, 256, 64);
+    const tex = new THREE.CanvasTexture(c);
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
+    sprite.position.set(x, y, z);
+    sprite.scale.set((size || 0.6) * 4, size || 0.6, 1);
+    D.scene.add(sprite);
+    return sprite;
+  } catch (e) { console.warn('Label error', e); return null; }
 };
-D.clickableZone = function(id, data, mesh) {
-  mesh.userData = { id, data };
-  D.clickable.push(mesh);
-};
+D.clickableZone = function(id, data, mesh) { mesh.userData = { id, data }; D.clickable.push(mesh); };
 D.createTerrain = function() {
   D.makePlane(D.W, D.L, new THREE.MeshStandardMaterial({ color: D.COLORS.terrain, roughness: 1 }), 0, 0, 0, -Math.PI / 2);
   const grid = new THREE.GridHelper(Math.max(D.W, D.L), Math.max(D.W, D.L), 0x999999, 0xc2b9a8);
@@ -118,16 +117,4 @@ D.createTerrain = function() {
     const hedge = new THREE.Mesh(new THREE.BoxGeometry(s.w > s.d ? s.w - 0.6 : 0.8, hedgeH, s.w > s.d ? 0.8 : s.d - 0.6), hedgeMat);
     const hedgeX = s.x > 0 ? s.x - 0.5 : (s.x < 0 ? s.x + 0.5 : s.x);
     const hedgeZ = s.z > 0 ? s.z - 0.5 : (s.z < 0 ? s.z + 0.5 : s.z);
-    hedge.position.set(hedgeX, hedgeH/2, hedgeZ); hedge.castShadow = true; hedge.receiveShadow = true; fenceGroup.add(hedge);
-  });
-  D.scene.add(fenceGroup); D.register(fenceGroup, 0);
-};
-D.createPaths = function() {
-  const pathGroup = new THREE.Group();
-  const pathMat = new THREE.MeshStandardMaterial({ color: D.COLORS.path, roughness: 1 });
-  const p1 = new THREE.Mesh(new THREE.PlaneGeometry(2.5, D.L - 2), pathMat);
-  p1.rotation.x = -Math.PI/2; p1.position.set(D.W/2 - 2, 0.03, 0); pathGroup.add(p1);
-  const p2 = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 30), pathMat);
-  p2.rotation.x = -Math.PI/2; p2.rotation.z = -Math.PI / 5.5; p2.position.set(-2, 0.03, 5); pathGroup.add(p2);
-  D.scene.add(pathGroup); D.register(pathGroup, 0);
-};
+    hedge.position.set(hedgeX, hedgeH/2, hedgeZ); hedge.castShadow =
